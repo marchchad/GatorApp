@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% load template_helpers %}
+{% block content %}
+    <div id='imageCarousel' class='carousel slide' date-ride='carousel'>
+        <ol class='carousel-indicators imageList'>
+        {% for i in jobs.0.image_count|get_range %}
+            <li data-target="#imageCarousel" data-slide-to="{{i}}" class="active"></li>
+        {% endfor %}
+        </ol>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+        {% for i in jobs.0.image_count|get_range %}
+            <div class="item {% if i = 1 %}active{% else %}{% endif %}">
+                <img src="/static/jobs/images/{{jobs.0.image_name_base}}{{i}}.jpg" alt="{{jobs.0.image_name_base}}" />
+                <div class="carousel-caption">
+                    <p>Caption...</p>
+                </div>
+            </div>
+        {% empty %}
+            <div class="item active">
+                <p>Sorry, no images available.</p>
+            </div>
+        {% endfor %}
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#imageCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#imageCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <div  class="container">
+        <div id="highlightedJobs">
+        {% if jobs %}
+            {% for job in jobs %}
+                <div class="col-sm-4">
+                    <div class="jobCard">
+                        <h4><a href="{% url 'details' job.id %}">{{job.name}}</a></h4>
+                        <hr/>
+                        <div class="jobImage">
+                            <img src="/static/jobs/images/{{job.image_name_base}}1.jpg" />
+                        </div>
+                        <div class="jobTags">
+                            {% for tag in job.tags.all %}
+                                <div class="tag">
+                                    {{tag}}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="jobDesc">
+                            {{job.desc}}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No jobs are available.</p>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}
